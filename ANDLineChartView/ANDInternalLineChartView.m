@@ -35,11 +35,11 @@
   self = [super initWithFrame:frame];
   if(self){
     [self setChartContainer:chartContainer];
-    [self setupGradientLayer];
-    [self setupMaskLayer];
+    //[self setupGradientLayer];
+    //[self setupMaskLayer];
     [self setupGraphLayer];
     [self setBackgroundColor:[UIColor clearColor]];
-    [self setOpaque:NO];
+    [self setOpaque:YES];
   }
   return self;
 }
@@ -49,8 +49,8 @@
   [_graphLayer setFrame:[self bounds]];
   [_graphLayer setGeometryFlipped:YES];
   [_graphLayer setStrokeColor:[[self.chartContainer lineColor] CGColor]];
-  [_graphLayer setFillColor:nil];
-  [_graphLayer setLineWidth:2.0f];
+  [_graphLayer setFillColor:[UIColor clearColor].CGColor];
+  [_graphLayer setLineWidth:3.0f];
   [_graphLayer setLineJoin:kCALineJoinBevel];
   [[self layer] addSublayer:_graphLayer];
 }
@@ -71,7 +71,7 @@
   [_maskLayer setGeometryFlipped:YES];
   [_maskLayer setStrokeColor:[[UIColor clearColor] CGColor]];
   [_maskLayer setFillColor:[[UIColor blackColor] CGColor]];
-  [_maskLayer setLineWidth:2.0f];
+  [_maskLayer setLineWidth:3.0f];
   [_maskLayer setLineJoin:kCALineJoinBevel];
   [_maskLayer setMasksToBounds:YES];
 }
@@ -102,8 +102,8 @@
   [path moveToPoint:CGPointMake(0.0, 0.0)];
   NSUInteger numberOfPoints = [self.chartContainer numberOfElements];
   _numberOfPreviousElements = numberOfPoints;
-  CGFloat xPosition = 0.0;
-  CGFloat yMargin = 0.0;
+  CGFloat xPosition = 2.0;
+  CGFloat yMargin = 2.0;
   CGFloat yPosition = 0.0;
 
   [_graphLayer setStrokeColor:[[self.chartContainer lineColor] CGColor]];
@@ -248,7 +248,7 @@
                                                                     CGSizeMake(CIRCLE_SIZE-strokeWidth, CIRCLE_SIZE-strokeWidth)}];
     CGContextSaveGState(context);
     [[self.chartContainer elementFillColor] setFill];
-    [ovalPath fill];
+    //[ovalPath fill];
     CGContextRestoreGState(context);
     
     [[self.chartContainer elementStrokeColor] setStroke];

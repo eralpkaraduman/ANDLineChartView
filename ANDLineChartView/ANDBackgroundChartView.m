@@ -23,6 +23,7 @@
   if(self){
     [self setContentMode:UIViewContentModeRedraw];
     [self setChartContainer:chartContainer];
+    [self setBackgroundColor:[UIColor clearColor]];
   }
   return self;
 }
@@ -36,7 +37,7 @@
   CGContextRef context = UIGraphicsGetCurrentContext();
   UIBezierPath *boundsPath = [UIBezierPath bezierPathWithRect:self.bounds];
   CGContextSetFillColorWithColor(context, [[self.chartContainer chartBackgroundColor] CGColor]);
-  [boundsPath fill];
+  //[boundsPath fill];
   
   CGFloat maxHeight = [self viewHeight];
   
