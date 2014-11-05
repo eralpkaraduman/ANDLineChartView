@@ -7,10 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ANDInternalLineChartView.h"
+#import "ANDBackgroundChartView.h"
 
 @protocol ANDLineChartViewDataSource,ANDLineChartViewDelegate;
 
 @interface ANDLineChartView : UIView
+
+
+//ANDInternalLineChartView *_internalChartView;
+//ANDBackgroundChartView *_backgroundChartView;
+@property ANDInternalLineChartView *internalChartView;
+@property ANDBackgroundChartView *backgroundChartView;
 
 @property (nonatomic, strong) UIFont *gridIntervalFont;
 

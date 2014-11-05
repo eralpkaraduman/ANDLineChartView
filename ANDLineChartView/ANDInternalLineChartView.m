@@ -8,6 +8,7 @@
 
 #import "ANDInternalLineChartView.h"
 #import "ANDLineChartView.h"
+#import "ANDBackgroundChartView.h"
 #import "tgmath.h"
 
 #define INTERVAL_TEXT_LEFT_MARGIN 10.0
@@ -91,7 +92,10 @@
   [_maskLayer setFrame:[self bounds]];
   [_gradientLayer setFrame:[self bounds]];
 
-  [self refreshGraphLayer];
+    ANDBackgroundChartView *bgView = ((ANDLineChartView*)(self.superview.superview)).backgroundChartView;
+    if(bgView.maxLabelWidth>0){
+        [self refreshGraphLayer];
+    }
 }
 
 - (void)refreshGraphLayer{
@@ -99,7 +103,7 @@
     return;
 
   UIBezierPath *path = [UIBezierPath bezierPath];
-  [path moveToPoint:CGPointMake(0.0, 0.0)];
+  //[path moveToPoint:CGPointMake(0.0, 0.0)];
   NSUInteger numberOfPoints = [self.chartContainer numberOfElements];
   _numberOfPreviousElements = numberOfPoints;
   CGFloat xPosition = 2.0;
@@ -114,12 +118,20 @@
     CGFloat value = [self.chartContainer valueForElementAtRow:i];
     CGFloat minGridValue = [self.chartContainer minValue];
     
-    xPosition += [self.chartContainer spacingForElementAtRow:i] ;
-    yPosition = yMargin + floor((value-minGridValue)*[self pixelToRecordPoint]);
+      //if(i>0){
+      xPosition += [self.chartContainer spacingForElementAtRow:i];
+      //}
     
+      yPosition = yMargin + floor((value-minGridValue)*[self pixelToRecordPoint]);
+      
     CGPoint newPosition = CGPointMake(xPosition, yPosition);
-    [path addLineToPoint:newPosition];
-    
+      
+      if(i==0){
+          [path moveToPoint:newPosition];
+      }else{
+          [path addLineToPoint:newPosition];
+      }
+      
     CALayer *circle = [self circleLayerForPointAtRow:i];
     CGPoint oldPosition = [circle.presentationLayer position];
     oldPosition.x = newPosition.x;

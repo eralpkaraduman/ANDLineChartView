@@ -10,5 +10,6 @@
 @class ANDLineChartView;
 
 @interface ANDBackgroundChartView : UIView
+@property (assign,nonatomic) CGFloat maxLabelWidth;
 - (instancetype)initWithFrame:(CGRect)frame chartContainer:(ANDLineChartView*)chartContainer;
 @end

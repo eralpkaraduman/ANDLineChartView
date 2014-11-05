@@ -9,7 +9,7 @@
 #import "ANDBackgroundChartView.h"
 #import "ANDLineChartView.h"
 
-#define INTERVAL_TEXT_LEFT_MARGIN 10.0
+#define INTERVAL_TEXT_LEFT_MARGIN 0.0
 #define INTERVAL_TEXT_MAX_WIDTH 100.0
 
 @interface ANDBackgroundChartView()
@@ -58,6 +58,8 @@
   CGFloat minIntervalValue = [self.chartContainer minValue];
   CGFloat maxIntervalDiff = (maxIntervalValue - minIntervalValue)/(numberOfIntervalLines-1);
   
+    CGFloat maxFitsWidth = 0;
+    
   for(NSUInteger i = 0;i<numberOfIntervalLines;i++){
     [[self.chartContainer gridIntervalLinesColor] setStroke];
     [gridLinePath stroke];
@@ -66,10 +68,19 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
     [paragraphStyle setLineBreakMode:NSLineBreakByTruncatingTail];
     
+      UIFont *gridIntervalFont = [self.chartContainer gridIntervalFont];
+      
+      CGSize fits =[stringToDraw sizeWithAttributes:@{NSFontAttributeName: gridIntervalFont,
+                                        NSForegroundColorAttributeName: stringColor,
+                                        NSParagraphStyleAttributeName: paragraphStyle
+                                         }];
+
+      maxFitsWidth = MAX(maxFitsWidth,fits.width);
+      
     [stringToDraw drawInRect:CGRectMake(INTERVAL_TEXT_LEFT_MARGIN,
-                                        (CGRectGetHeight([self frame]) - [[self.chartContainer gridIntervalFont] lineHeight]),
+                                        (CGRectGetHeight([self frame]) -(i==numberOfIntervalLines-1?5:[gridIntervalFont lineHeight])/*- [[self.chartContainer gridIntervalFont] lineHeight]*/),
                                         INTERVAL_TEXT_MAX_WIDTH, [[self.chartContainer gridIntervalFont] lineHeight])
-              withAttributes:@{NSFontAttributeName: [self.chartContainer gridIntervalFont],
+              withAttributes:@{NSFontAttributeName: gridIntervalFont,
                                NSForegroundColorAttributeName: stringColor,
                                NSParagraphStyleAttributeName: paragraphStyle
                                }];
@@ -77,6 +88,8 @@
     
     CGContextTranslateCTM(context, 0.0, - intervalSpacing);
   }
+    
+    self.maxLabelWidth = maxFitsWidth;
   
   CGContextRestoreGState(context);
 }

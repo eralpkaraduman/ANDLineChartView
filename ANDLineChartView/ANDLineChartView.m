@@ -7,8 +7,7 @@
 //
 
 #import "ANDLineChartView.h"
-#import "ANDInternalLineChartView.h"
-#import "ANDBackgroundChartView.h"
+
 
 #define DEFAULT_ELEMENT_SPACING 30.0
 #define DEFAULT_FONT_SIZE 12.0
@@ -18,8 +17,8 @@
 
 @interface ANDLineChartView()<UIScrollViewDelegate>{
   UIScrollView *_scrollView;
-  ANDInternalLineChartView *_internalChartView;
-  ANDBackgroundChartView *_backgroundChartView;
+  //ANDInternalLineChartView *_internalChartView;
+  //ANDBackgroundChartView *_backgroundChartView;
   NSLayoutConstraint *_floatingConstraint;
   NSLayoutConstraint *_backgroundWidthEqualToScrollViewConstraints;
   NSLayoutConstraint *_backgroundWidthEqualToChartViewConstraints;
@@ -107,8 +106,10 @@
 }
 
 - (void)reloadData{
-  [_backgroundChartView setNeedsDisplay];
+
   [_internalChartView reloadData];
+    [_internalChartView setNeedsDisplay];
+    [_backgroundChartView setNeedsDisplay];
 }
 
 - (void)setShouldLabelsFloat:(BOOL)shouldLabelsFloat{
@@ -137,6 +138,8 @@
 #pragma mark - ANDInternalLineChartViewDataSource methods
 
 - (CGFloat)spacingForElementAtRow:(NSUInteger)row{
+    
+    /*
   CGFloat spacing = [self elementSpacing];
   if(_delegate && [_delegate respondsToSelector:@selector(chartView:spacingForElementAtRow:)]){
     CGFloat newSpacing = [_delegate chartView:self spacingForElementAtRow:row];
@@ -147,7 +150,18 @@
     : imageSize.width;
     if(newSpacing > 0) spacing = newSpacing;
   }
-  
+  */
+    
+    //NSLog(@"self.bounds.size.width %f",self.bounds.size.width);
+    
+    //NSLog(@"_backgroundChartView.maxLabelWidth %f",_backgroundChartView.maxLabelWidth);
+    
+    CGFloat leftMargin = _backgroundChartView.maxLabelWidth<=0?0:_backgroundChartView.maxLabelWidth+5;
+    
+    if(row==0)return leftMargin;
+    
+    CGFloat spacing = ((self.bounds.size.width-leftMargin)/([self numberOfElements]-1))*row;
+    
   return spacing;
 }
 
